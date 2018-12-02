@@ -93,13 +93,13 @@ if __name__ == "__main__":
 	# initialize brute force attack with public information
 	brute_force_algorithm = BruteForceAttack(n = 226679, e = 2737) # p = 419, q = 541 -- 35-70 microseconds
 
-	# benchmark how long the breaking takes
+	# benchmark how long it takes to break the key
 	benchmark_start = datetime.datetime.now()
 	brute_force_algorithm.find_private_key()
 	benchmark_time = datetime.datetime.now() - benchmark_start
 	print (benchmark_time.microseconds)
 
 	# ensure it can correctly decipher messages
-	cipher = brute_force_algorithm.encrypt_message(123456) # the message must have the same or fewer digits than the primes' product
+	cipher = brute_force_algorithm.encrypt_message(message = 123456) # m < n
 	message = brute_force_algorithm.decrypt_message(cipher = cipher)
 	print ("private key:", brute_force_algorithm.private_key, "decrypted message:", int(message))
