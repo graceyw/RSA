@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """ attempts a brute force attack on an RSA key -- uses a victim's public key and n to find their private key and decrypt their messages"""
 
+import datetime
+
 class BruteForceAttack:
 
 	def __init__(self, n, e):
@@ -57,7 +59,7 @@ class BruteForceAttack:
 			if b == 1:
 				return m - x
 			elif b == 0:
-				return None
+				return NoneW\
 
 			q = a / b
 			a = a - b * q
@@ -88,8 +90,16 @@ class BruteForceAttack:
 
 
 if __name__ == "__main__":
-	brute_force_algorithm = BruteForceAttack(n = 3233, e = 17)
+	# initialize brute force attack with public information
+	brute_force_algorithm = BruteForceAttack(n = 226679, e = 2737) # p = 419, q = 541 -- 35-70 microseconds
+
+	# benchmark how long the breaking takes
+	benchmark_start = datetime.datetime.now()
 	brute_force_algorithm.find_private_key()
-	cipher = brute_force_algorithm.encrypt_message(1234) # the message must have the same or fewer digits than the primes' product
+	benchmark_time = datetime.datetime.now() - benchmark_start
+	print (benchmark_time.microseconds)
+
+	# ensure it can correctly decipher messages
+	cipher = brute_force_algorithm.encrypt_message(123456) # the message must have the same or fewer digits than the primes' product
 	message = brute_force_algorithm.decrypt_message(cipher = cipher)
 	print ("private key:", brute_force_algorithm.private_key, "decrypted message:", int(message))
