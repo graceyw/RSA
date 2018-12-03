@@ -60,9 +60,34 @@ def generate_public_key(p,q):
     return publicKey
 
 
-def generate_private_key():
+def generate_private_key(publicKey,p,q):
     '''Generate private key d: Find the modular multiplicative inverse d of (e mod LCM) s.t. the remainder after dividing d * e by LCM is 1'''
-    return 5
+		""" uses the half-extended Euclidean algorithm to solve for the private key """
+		m = (p - 1) * (q - 1)
+
+		a = generate_public_key(p,q)
+		b = m
+		x = 0
+		y = 1
+
+		while True:
+			if a == 1:
+				return y
+			elif a == 0:
+				return None
+
+			q = b / a
+			b = b - a * q
+			x = x + q * y
+
+			if b == 1:
+				return m - x
+			elif b == 0:
+				return NoneW\
+
+			q = a / b
+			a = a - b * q
+            y = y + q * x
 
 
 def encrypt(upperBound = math.inf):  # TODO could change to always be inf, but rn allows for preference of smaller/bigger
