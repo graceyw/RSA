@@ -58,7 +58,7 @@ class BruteForceAttack:
 			if b == 1:
 				return m - x
 			elif b == 0:
-				return NoneW\
+				return None
 
 			q = a / b
 			a = a - b * q
@@ -81,7 +81,7 @@ class BruteForceAttack:
 		message = cipher ** self.private_key % self.hidden_primes_product
 		return message
 
-	
+
 	def encrypt_message(self, message):
 		""" just for testing """
 		cipher = message ** self.public_key % self.hidden_primes_product
