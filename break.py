@@ -59,7 +59,7 @@ class BruteForceAttack:
 			if b == 1:
 				return m - x
 			elif b == 0:
-				return NoneW\
+				return None
 
 			q = a / b
 			a = a - b * q
