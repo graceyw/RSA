@@ -5,8 +5,12 @@ import random
 '''Pick 2 random primes (have size as a changeable input?)'''
 
 def prime_generator(upperBound = math.inf):
-    '''INPUT: upperBound.
-    OUTPUT: A list of primes that are all <= upperBound.'''
+    '''
+    INPUT: upperBound (the largest acceptable prime) is infinity by default.
+    We'll use a specific value if we want there to be an upper limit, specifically
+    when generating the public key.
+    OUTPUT: A list of primes that are all <= upperBound.
+    '''
     primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,
     103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,
     199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,
@@ -26,10 +30,17 @@ def prime_generator(upperBound = math.inf):
     1831,1847,1861,1867,1871,1873,1877,1879,1889,1901,1907,1913,1931,1933,1949,
     1951,1973,1979,1987,1993,1997,1999,2003,2011,2017,2027,2029,2039,2053,2063]
 
-    if upperBound != math.inf:          #TODO: make more efficient for when we have more primes
+    '''This loop iterates through the above list, locating the index of the
+    upperBound prime and returning the list of primes up to that index.
+    Certainly not the most efficient way to do this, but because we're not
+    working with very many primes right now, it gets the job done. We'd want
+    to change this to perhaps start at primes[primes.length()/2] and then continue
+    cutting into the appropriate half until the prime is found.'''
+
+    if upperBound != math.inf:
         index = 0
         for i in primes:
-            if i <= upperBound:         #TODO not working yet
+            if i <= upperBound:
                 index += 1
         return primes[0:index+1]
     else:
@@ -51,8 +62,6 @@ def generate_public_key(p,q):
     n = p*q
     phi = (p-1)*(q-1)  # This relationship is why we need to use prime numbers...ensure we know how to explain this.
     keyOptions = prime_generator(phi)
-    # print(keyOptions)
-    # print(phi)
     publicKey = random.choice(keyOptions)
     while math.gcd(phi,publicKey) != 1:
         publicKey = random.choice(keyOptions)   # If the GCD isn't 1, choose a different key
@@ -60,7 +69,12 @@ def generate_public_key(p,q):
 
 
 def generate_private_key(publicKey,p,q):
-    '''Generate private key d: Find the modular multiplicative inverse d of (e mod LCM) s.t. the remainder after dividing d * e by LCM is 1. Uses the half-extended Euclidean algorithm to solve for the private key'''
+    '''
+    INPUT: A publicKey (generated in generate_public_key(p,q)) and the primes chosen p and q.
+    To generate the private key, this function finds the modular multiplicative inverse d of
+    (e mod LCM) s.t. the remainder after dividing d * e by LCM is 1. Uses the half-extended
+    Euclidean algorithm to solve for the private key.
+    OUTPUT: A private key.'''
     m = (p - 1) * (q - 1)
 
     a = generate_public_key(p,q)
@@ -88,21 +102,16 @@ def generate_private_key(publicKey,p,q):
         y = y + q * x
 
 
-def encrypt(upperBound = math.inf):  # TODO could change to always be inf, but rn allows for preference of smaller/bigger
-    '''INPUT:
+def encrypt(upperBound = math.inf):
+    '''
+    This is the only function we need to call in order to produce the public and private keys.
+    INPUT: An upperBound, which is infinity by default unless replaced in the function call.
     OUTPUT: A public key and a private key.'''
     p,q = prime_picker(upperBound)
     publicKey = generate_public_key(p,q)
-    # print(generate_public_key(p,q))
-    return (publicKey, generate_private_key(publicKey,p,q))
-
-
-# def decrypt():
-#     return
+    return ("Public key: " + str(publicKey),
+            "Private key: " + str(generate_private_key(publicKey,p,q)))
 
 
 if __name__ == '__main__':
-    # print(prime_generator(653))
-    # print(prime_picker(653))
-    # print(generate_public_key(13,17))
-    print(encrypt(173))
+    print(encrypt(2011))
