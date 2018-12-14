@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """ attempts a brute force attack on an RSA key -- uses a victim's public key and n to find their private key and decrypt their messages"""
 
 import datetime
@@ -34,7 +33,7 @@ class BruteForceAttack:
 		""" calls helper functions to find the hidden primes and private key via brute force"""
 		p, q = self.find_hidden_primes()
 		self.private_key = self.calculate_private_key(p, q)
-		return self.private_key 
+		return self.private_key
 
 
 	def calculate_private_key(self, p, q):
@@ -59,7 +58,7 @@ class BruteForceAttack:
 			if b == 1:
 				return m - x
 			elif b == 0:
-				return NoneW\
+				return None
 
 			q = a / b
 			a = a - b * q
@@ -82,7 +81,7 @@ class BruteForceAttack:
 		message = cipher ** self.private_key % self.hidden_primes_product
 		return message
 
-	
+
 	def encrypt_message(self, message):
 		""" just for testing """
 		cipher = message ** self.public_key % self.hidden_primes_product
